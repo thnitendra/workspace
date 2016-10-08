@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd            
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        				http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+						">
+
+    <aop:config>
+        <aop:pointcut id="partnerServiceAop"
+                expression="execution(* nit.soft.partner.service.PartnerService.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="partnerServiceAop"/>
+    </aop:config>
+
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <tx:method name="save" propagation="REQUIRED" rollback-for="Exception"/>    <!-- by default, only runtime exception triggers rollback -->
+            <tx:method name="*" propagation="REQUIRED" />
+            <!-- <tx:method name="*" propagation="SUPPORTS" read-only="true"/> -->
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- <bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+	    <property name="sessionFactory" ref="hibernateSessionFactory" />
+	</bean> -->    
+
+    <bean id="txManager" class="org.springframework.transaction.jta.JtaTransactionManager">
+      <!-- <property name="transactionManager" ref="arjunaTransactionManager" />
+      <property name="userTransaction" ref="arjunaUserTransaction" /> -->
+      <property name="transactionManager" ref="transactionManager" />
+      <property name="userTransaction" ref="userTransaction" />
+      <property name="transactionSynchronizationName" value="SYNCHRONIZATION_ON_ACTUAL_TRANSACTION"/>
+    </bean>
+
+<!-- +++++++++++JBOSSTS - ARJUNA +++++++++++++++++++++++++++++ -->
+	<!-- does not work; possibly because it uses jts - instead of jta - mode -->
+	<!--  
+    <bean id="transactionManager" class="com.arjuna.ats.jta.TransactionManager" factory-method="transactionManager" />
+	<bean id="userTransaction" class="com.arjuna.ats.jta.UserTransaction" factory-method="userTransaction" />
+ 	-->	
+	<!-- 
+	<bean id="transactionManager" class="com.arjuna.ats.internal.jta.transaction.jts.TransactionManagerImple" />  
+ 	<bean id="userTransaction" class="com.arjuna.ats.internal.jta.transaction.jts.UserTransactionImple" />  
+   	-->
+  	<bean id="transactionManager" class="com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionManagerImple" /> 
+	<bean id="userTransaction" class="com.arjuna.ats.internal.jta.transaction.arjunacore.UserTransactionImple" />
+
+<!-- +++++++++++ ATOMIKOS +++++++++++++++++++++++++++++ -->
+  	<!-- 
+  	<bean id="transactionManager" class="com.atomikos.icatch.jta.J2eeTransactionManager"/>
+   	<bean id="userTransaction" class="com.atomikos.icatch.jta.J2eeUserTransaction" />
+    -->
+<!-- 	
+    <bean id="userTransactionService" class="com.atomikos.icatch.config.UserTransactionServiceImp" init-method="init" destroy-method="shutdownForce"> 
+	    <constructor-arg> 
+			<util:properties location="classpath:jta.properties"/> 
+			
+	    </constructor-arg> 
+	</bean>
+    <bean id="transactionManager" class="com.atomikos.icatch.jta.UserTransactionManager" init-method="init" destroy-method="close" depends-on="userTransactionService">
+    	<property name="startupTransactionService"><value>true</value></property>
+        <property name="forceShutdown"><value>true</value></property>
+        <property name="transactionTimeout"><value>600</value></property>
+	</bean>
+	<bean id="userTransaction" class="com.atomikos.icatch.jta.UserTransactionImp" />
+-->
+</beans>

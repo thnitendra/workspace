@@ -1,0 +1,10 @@
+-- Local artifact
+mvn install:install-file \
+-Dfile=/opt/apache-tomcat-8.5.0/lib/servlet-api.jar \
+-DgroupId=3rd-party.tomcat-lib \
+-DartifactId=servlet-api \
+-Dversion=8.5.0 \
+-Dpackaging=jar
+
+-- Remote artifact
+mvn dependency:get -DgroupId=org.andromda.maven.plugins -DartifactId=andromdapp-maven-plugin -Dversion=3.4

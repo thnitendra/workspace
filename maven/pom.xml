@@ -1,0 +1,142 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>nit-lib</groupId>
+  <artifactId>BaseResolver</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>BaseResolver</name>
+  <!-- <url>http://maven.apache.org</url> -->
+
+  <repositories>
+    <repository>
+      <id>jboss-ga-repository</id>
+      <url>http://maven.repository.redhat.com/techpreview/all</url>
+    </repository>
+    <repository>
+      <id>jboss-earlyaccess-repository</id>
+      <url>http://maven.repository.redhat.com/earlyaccess/all/</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>jboss-ga-plugin-repository</id>
+      <url>http://maven.repository.redhat.com/techpreview/all</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>jboss-earlyaccess-plugin-repository</id>
+      <url>http://maven.repository.redhat.com/earlyaccess/all/</url>
+    </pluginRepository>
+  </pluginRepositories>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+	<version.spring.pom>4.2.5.RELEASE</version.spring.pom>
+  	<version.aspectj>1.8.9</version.aspectj>
+	
+	<version.tomcat>8.5.0</version.tomcat>
+	<version.jboss-spec>3.0.3.Final</version.jboss-spec>
+	<version.jboss.as>7.5.0.Final-redhat-21</version.jboss.as>	
+	
+	<version.mysql-connector>5.1.38</version.mysql-connector>
+	<version.hibernate>4.0.4</version.hibernate>
+	
+  	<version.jbossts>4.16.6.Final</version.jbossts>
+  	<version.atomikos>4.0.2</version.atomikos>  	
+
+  	<version.gson>2.6.2</version.gson>
+	<version.junit>[4.12,)</version.junit>
+
+  </properties>
+	
+  <modules>
+  	<module>spring</module>
+  </modules>	
+
+  <dependencyManagement>
+  	<dependencies>
+		<dependency>
+	        <groupId>nit-lib</groupId>
+		    <artifactId>spring</artifactId>
+		    <version>${version.spring.pom}</version>
+		    <type>pom</type>
+		</dependency>
+	  	<dependency>
+			<groupId>org.aspectj</groupId>
+		   	<artifactId>aspectjweaver</artifactId>
+		   	<version>${version.aspectj}</version>
+		</dependency>
+		
+		<!-- ******** Web/App Servers ********* -->
+		<dependency>
+	    	<groupId>3rd-party.tomcat-lib</groupId>
+	      	<artifactId>servlet-api</artifactId>
+	      	<version>${version.tomcat}</version>
+	      	<scope>provided</scope>
+	    </dependency>
+	    <dependency>
+            <groupId>org.jboss.spec</groupId>
+            <artifactId>jboss-javaee-6.0</artifactId>
+            <version>${version.jboss-spec}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.as</groupId>
+            <artifactId>jboss-as-ejb-client-bom</artifactId>
+            <version>${version.jboss.as}</version>
+            <scope>import</scope>
+            <type>pom</type>
+        </dependency>
+	    
+	    <!-- ******** Database / Persistence ********* -->
+		<dependency>
+		    <groupId>mysql</groupId>
+		    <artifactId>mysql-connector-java</artifactId>
+		    <version>${version.mysql-connector}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.karaf.jpa</groupId>
+		    <artifactId>hibernate</artifactId>
+		    <version>${version.hibernate}</version>
+	  	</dependency>
+	  	
+		<!-- ******** JSON ********* -->
+		<dependency>
+		    <groupId>com.google.code.gson</groupId>
+		    <artifactId>gson</artifactId>
+		    <version>${version.gson}</version>
+		</dependency>    
+		
+		<!-- ******** JTA ********* -->
+		<dependency>
+		    <groupId>org.jboss.jbossts</groupId>
+		    <artifactId>jbossjts</artifactId>
+		    <version>${version.jbossts}</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.atomikos</groupId>
+		    <artifactId>transactions-jta</artifactId>
+		    <version>${version.atomikos}</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.atomikos</groupId>
+		    <artifactId>transactions-jdbc</artifactId>
+		    <version>${version.atomikos}</version>
+		</dependency>
+	  	
+  </dependencies>
+  </dependencyManagement>
+  		
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${version.junit}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>

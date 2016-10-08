@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 10, 2016 11:55:33 PM by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="nit.soft.partner.model.Address" table="ADDRESS" >
+        <id name="id" type="int" access="field">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+      	<version name="version" column="VERSION" /> 
+      	 
+       	<many-to-one name="baseAddress" 
+       			 class="nit.soft.partner.model.BaseAddress" 
+       			 column="BASE_ADDRESS"
+       			 not-null="true"
+       			 unique-key="UK_addr"
+       			 fetch="join"/>
+       
+       	<property name="street" type="java.lang.String" column="STREET" unique-key="UK_addr" />       
+       	<property name="housing" type="java.lang.String" column="HOUSING" unique-key="UK_addr" />
+       	<property name="bldg" type="java.lang.String" column="BLDG" unique-key="UK_addr" />
+       	<property name="house" type="java.lang.String" column="HOUSE" unique-key="UK_addr" />
+      
+    </class>
+</hibernate-mapping>

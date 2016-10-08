@@ -1,0 +1,26 @@
+[
+{
+	"street"		:"Kojimacho",
+	"housing"		:"5 - 7 - UR Housing",
+	"bldg"			:"4",
+	"house"			:"708"
+},
+{
+	"street"		:"Kojimacho",
+	"housing"		:"5 - 7 - UR Housing",
+	"bldg"			:"5",
+	"house"			:"708"
+},
+{
+	"street"		:"Kojimacho",
+	"housing"		:"5 - 7 - UR Housing",
+	"bldg"			:"6",
+	"house"			:"708"
+},
+{
+	"street"		:"Kojimacho",
+	"housing"		:"5 - 7 - UR Housing",
+	"bldg"			:"7",
+	"house"			:"708"
+}
+]

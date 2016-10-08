@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 10, 2016 11:55:33 PM by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="nit.soft.partner.model.BaseAddress" table="BASE_ADDRESS" >
+        <id name="id" type="int" access="field">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        <version name="version" column="VERSION" />
+      	
+        <property name="zipcode" type="java.lang.String" column="ZIPCODE" not-null="true" unique="true" />
+        <property name="country" type="java.lang.String" column="COUNTRY" not-null="true"/>
+        <property name="region" type="java.lang.String" column="REGION"/>
+        <property name="state" type="java.lang.String" column="STATE" not-null="true"/>
+        <property name="city" type="java.lang.String" column="CITY" not-null="true"/>
+        <property name="district" type="java.lang.String" column="DISTRICT" />
+        <property name="block" type="java.lang.String" column="BLOCK" />
+	        
+    </class>
+</hibernate-mapping>

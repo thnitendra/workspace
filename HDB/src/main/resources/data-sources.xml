@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd            
+						">
+	
+	<!-- TODO: Spring DriverManagerDataSource does not do pooling of datasources. So, not good for production. check about datasource pooling vs connection pooling -->
+	<!-- <bean id="mySqlDS" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	    <property name="driverClassName" value="${jdbc.driverClassName}" />
+	    <property name="url" value="${jdbc.url}" />
+	    <property name="username" value="${jdbc.username}"/>
+	    <property name="password" value="${jdbc.password}"/>
+	</bean> -->
+
+<!-- Notes: 
+	All XAResources (XA supported datasources), are enlisted with the transaction manager using javax.transaction.Transaction.enlistResource
+	Another way is to use JCA; ref: http://jbossts.blogspot.jp/2012/01/connecting-dots.html 
+-->
+
+<!-- for jbossts - arjuna to work, i've to add the config values as environment variables -->
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean" lazy-init="false">
+    	<property name="targetObject" value="#{@systemProperties}"/>
+		<property name="targetMethod" value="putAll"/>
+      	<property name="arguments">
+			<util:properties location="classpath:jta.properties"/>
+		</property>
+	</bean>	
+	<bean id="mySqlDS" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName" value="com.arjuna.ats.jdbc.TransactionalDriver" />
+      <property name="url" value="jdbc:arjuna:src/main/resources/arjuna_dbconfig.properties"/>
+      <property name="username" value="${jdbc.username}"/>
+	  <property name="password" value="${jdbc.password}"/>
+      <property name="connectionProperties">
+      	<props>
+         <prop key="DYNAMIC_CLASS">com.arjuna.ats.internal.jdbc.drivers.PropertyFileDynamicClass</prop>
+        </props>
+      </property>
+    </bean>
+<!-- 
+	<bean id="mySqlDS" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close">
+      <property name="uniqueResourceName" value="DokaDataSourceTransaction"/>
+      <property name="xaDataSourceClassName" value="${jdbc.xaDS}"/>
+      <property name="xaProperties">
+      	<props>
+      		<prop key="url">${jdbc.url}</prop>
+      		<prop key="user">${jdbc.username}</prop>
+      		<prop key="password">${jdbc.password}</prop>
+      	</props>
+      </property>
+      <property name="testQuery" value="${jdbc.testQuery}"/>
+	</bean>
+ -->   
+</beans>

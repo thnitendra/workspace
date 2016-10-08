@@ -1,0 +1,65 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+  	<groupId>nit-lib</groupId>
+  	<artifactId>BaseResolver</artifactId>
+  	<version>0.0.1-SNAPSHOT</version>
+  </parent>
+  
+  <artifactId>HDB</artifactId>
+
+  <build>
+  	<plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.3</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
+  <dependencies>	
+	<dependency>
+	 	<groupId>nit-lib</groupId>
+	 	<artifactId>spring</artifactId>
+	 	<type>pom</type>
+	</dependency>
+	<dependency>
+		<groupId>org.aspectj</groupId>
+	   	<artifactId>aspectjweaver</artifactId>
+	</dependency>
+	
+	<dependency>
+	 	<groupId>mysql</groupId>
+		<artifactId>mysql-connector-java</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.karaf.jpa</groupId>
+	 	<artifactId>hibernate</artifactId>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.jboss.jbossts</groupId>
+	    <artifactId>jbossjts</artifactId>
+	</dependency>
+	<!-- <dependency>
+	    <groupId>com.atomikos</groupId>
+	    <artifactId>transactions-jta</artifactId>
+	</dependency>
+	<dependency>
+	    <groupId>com.atomikos</groupId>
+	    <artifactId>transactions-jdbc</artifactId>
+	</dependency> -->
+	
+	<dependency>
+	    <groupId>com.google.code.gson</groupId>
+	    <artifactId>gson</artifactId>
+	    <scope>test</scope>
+	</dependency>    
+	
+  </dependencies>
+</project>
