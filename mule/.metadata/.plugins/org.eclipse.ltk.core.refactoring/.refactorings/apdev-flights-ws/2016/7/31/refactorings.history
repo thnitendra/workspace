@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;apdev-flights-ws/src/main/app/apdev-flights-ws.xml&apos; to &apos;implementation.xml&apos;" description="Rename resource &apos;apdev-flights-ws.xml&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/main/app/apdev-flights-ws.xml" name="implementation.xml" stamp="1469892590105" updateReferences="true"/>
-</session>

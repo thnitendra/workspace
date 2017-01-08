@@ -1,5 +1,0 @@
-authenticated.users=[{"token"\:"e5259d57-5c35-4204-9c75-42f04d0a3a0f","userId"\:"thn","refreshToken"\:""},{"token"\:"7f847cfe-8d44-458e-9781-25e7ac5d7064","userId"\:"nitendra","refreshToken"\:""}]
-current.token=7f847cfe-8d44-458e-9781-25e7ac5d7064
-current.user=nitendra
-eclipse.preferences.version=1
-expiration.time=7
