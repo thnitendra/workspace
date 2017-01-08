@@ -1,17 +1,9 @@
 package nit.algo;
 
 public class MaxSubArray {
-	
-	private int[] arr = //{-1, 2, 4, -6, 8};
-		  {13, -3, -25, 20, -3, -16, -23, 18, 20, -7, 12, -5, -22, 15, -4, 7};
-	
-	public static void main(String[] args) {		
-		MaxSubArray msa = new MaxSubArray();
-		Util.print(msa.arr);
-		System.out.println(msa.findMaxSubarry());		
-	}
-	
-	private class SubArrayInfo implements Comparable<SubArrayInfo>{
+	private int[] arr;
+
+	public class SubArrayInfo implements Comparable<SubArrayInfo>{
 		int start, end, sum;
 		
 		private SubArrayInfo(int s, int e, int sum) {
@@ -64,7 +56,8 @@ public class MaxSubArray {
 		}
 	}
 	
-	private SubArrayInfo findMaxSubarry() {
+	public SubArrayInfo findMaxSubarry(int[] arr) {
+		this.arr = arr;
 		int start = 0;
 		int end = arr.length - 1;
 		int mid = Util.mid(start, end);

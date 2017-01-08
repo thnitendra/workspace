@@ -1,18 +1,12 @@
 package nit.algo;
 
-public class QuickSort {
-	private int[] arr = {9, 3, 10, 12, 4, 2, 8, 6, 5};
-	
-	public static void main(String[] args) {
-		QuickSort qs = new QuickSort();
-		qs.print();
-		//System.out.println(qs.pivot(3, 8));
-		qs.sort();
-		qs.print();
-	}
-	
-	private void sort() {
+public class QuickSort<T extends Comparable<T>> {
+	private T[] arr;
+
+	public T[] sort(T[] arr) {
+		this.arr = arr;
 		sort(0, arr.length - 1);
+		return arr;
 	}
 	private void sort(int s, int e) {
 		if(s >= e || s < 0 || e >= arr.length) {
@@ -31,7 +25,8 @@ public class QuickSort {
 		assert s <= e;
 		int i = s, j = i - 1;
 		for(; i < e; ++i) {
-			if(arr[i] < arr[e]) {
+			//if(arr[i] < arr[e]) {
+			if(arr[i] != null && arr[i].compareTo(arr[e]) < 0) {
 				++j;
 				swap(j, i);
 			}
@@ -47,19 +42,9 @@ public class QuickSort {
 		if(i == j) {
 			return;
 		}
-		int temp = arr[i];
+		T temp = arr[i];
 		arr[i] = arr[j];
 		arr[j] = temp;
 	}
 	
-	public <T> void print(int s, int e) {
-		for(int i = s; i <= e; ++i) {
-			System.out.print(arr[i] + " ");
-		}
-		System.out.println();
-	}
-
-	public <T> void print() {
-		print(0, arr.length - 1);
-	}
 }
