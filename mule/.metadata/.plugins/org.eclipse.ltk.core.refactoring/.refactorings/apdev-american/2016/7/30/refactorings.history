@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;apdev-american.xml&apos; to &apos;apdev-american-ws/src/main/app&apos;&#x0A;- Original project: &apos;apdev-american&apos;&#x0A;- Destination element: &apos;apdev-american-ws/src/main/app&apos;&#x0A;- Original element: &apos;apdev-american.xml&apos;" description="Copy file" destination="=apdev-american-ws/src\/main\/app" element1="src/main/app/apdev-american.xml" files="1" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1468844393080" units="0" version="1.0"/>
+</session>

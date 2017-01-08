@@ -1,0 +1,3 @@
+api_version={"apiId"\:"83592","apiName"\:"American Flights API","versionName"\:"1.0","versionId"\:"81311","deprecated"\:false,"description"\:"API for training purpose","organizationId"\:"6e6a026b-c4c0-40ff-b68f-deaf6d765cf1","exportUrl"\:"https\://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/6e6a026b-c4c0-40ff-b68f-deaf6d765cf1/apis/83592/versions/81311/files/export","rootFileId"\:"925974"}
+eclipse.preferences.version=1
+users=[{"token"\:"e5259d57-5c35-4204-9c75-42f04d0a3a0f","userId"\:"thn","refreshToken"\:""}]

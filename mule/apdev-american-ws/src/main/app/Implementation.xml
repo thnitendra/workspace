@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:context="http://www.springframework.org/schema/context" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd">
+    <spring:beans>
+        <spring:bean id="DerbyDB" name="DerbyDB" class="org.enhydra.jdbc.standard.StandardDataSource">
+            <spring:property name="url" value="jdbc:derby://localhost:1527/memory:training"/>
+            <spring:property name="driverName" value="org.apache.derby.jdbc.ClientDriver"/>
+        </spring:bean>
+    </spring:beans>
+    <db:derby-config name="Derby_Configuration" dataSource-ref="DerbyDB" doc:name="Derby Configuration"/>
+    <context:property-placeholder location="american-${env}.properties"/>
+    <db:mysql-config name="MySQL_Configuration" host="${db.host}" port="${db.port}" user="${db.user}" password="${db.password}" database="${db.database}" doc:name="MySQL Configuration"/>
+    <flow name="getFlights">
+        <db:select config-ref="MySQL_Configuration" doc:name="Database">
+            <db:parameterized-query><![CDATA[SELECT *
+FROM american]]></db:parameterized-query>
+        </db:select>
+        <dw:transform-message metadata:id="d0b472cb-40e0-494f-927a-5817e41e763a" doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+payload map ((payload01 , indexOfPayload01) -> {
+	ID: payload01.ID,
+	code: payload01.code1 ++ payload01.code2,
+	price: payload01.price as :number,
+	departureDate: payload01.takeOffDate as :string,
+	origin: payload01.fromAirport,
+	destination: payload01.toAirport,
+	emptySeats: payload01.seatsAvailable as :number,
+	plane: {
+		type: payload01.planeType,
+		totalSeats: payload01.totalSeats as :number
+	}
+})]]></dw:set-payload>
+        </dw:transform-message>
+    </flow>
+    <flow name="getFlightsByID">
+        <db:select config-ref="MySQL_Configuration" doc:name="Database">
+            <db:parameterized-query><![CDATA[SELECT *
+FROM american
+WHERE id = #[message.inboundProperties.'http.uri.params'.ID]]]></db:parameterized-query>
+        </db:select>
+        <dw:transform-message metadata:id="d0b472cb-40e0-494f-927a-5817e41e763a" doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+payload map ((payload01 , indexOfPayload01) -> {
+	ID: payload01.ID,
+	code: payload01.code1 ++ payload01.code2,
+	price: payload01.price as :number,
+	departureDate: payload01.takeOffDate as :string,
+	origin: payload01.fromAirport,
+	destination: payload01.toAirport,
+	emptySeats: payload01.seatsAvailable as :number,
+	plane: {
+		type: payload01.planeType,
+		totalSeats: payload01.totalSeats as :number
+	}
+})]]></dw:set-payload>
+        </dw:transform-message>
+    </flow>
+    <flow name="postFlights">
+        <set-payload value="{message: flights created (but not really)!}" doc:name="Set Payload"/>
+    </flow>
+</mule>
