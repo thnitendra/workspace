@@ -1,5 +1,3 @@
-package nit.rakuten.codility;
-
 //you can also use imports, for example:
 //import java.util.*;
 

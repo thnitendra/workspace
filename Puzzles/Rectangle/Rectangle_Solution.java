@@ -1,5 +1,3 @@
-package nit.rakuten.codility;
-
 /**
  (0,0)
  x1,y1			x2, y1 
