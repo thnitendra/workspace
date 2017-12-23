@@ -1,8 +1,3 @@
-package nit.algo;
-
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * https://en.wikipedia.org/wiki/Knapsack_problem
  * https://dzone.com/articles/knapsack-problem

@@ -1,6 +1,3 @@
-package nit.algo;
-
-import nit.algo.MergeSort;
 import org.junit.Test;
 
 public class MergeSortTest {

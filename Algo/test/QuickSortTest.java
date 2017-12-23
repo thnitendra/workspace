@@ -1,4 +1,3 @@
-package nit.algo;
 
 import org.junit.Test;
 

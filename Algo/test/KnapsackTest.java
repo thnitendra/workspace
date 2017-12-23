@@ -1,11 +1,7 @@
-package nit.algo;
 
 import org.junit.Test;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.Set;
 
 /**
  * Created by nitendra.thakur on 2017/01/08.

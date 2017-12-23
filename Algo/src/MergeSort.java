@@ -1,5 +1,3 @@
-package nit.algo;
-
 import java.lang.reflect.Array;
 
 public class MergeSort<T extends Comparable<T>> {

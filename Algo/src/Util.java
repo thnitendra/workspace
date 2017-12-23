@@ -1,7 +1,3 @@
-package nit.algo;
-
-import java.util.Arrays;
-
 public final class Util {
 
 	private Util() {

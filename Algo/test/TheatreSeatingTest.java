@@ -1,10 +1,5 @@
-package nit.algo;
 
 import org.junit.Test;
-
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class TheatreSeatingTest {
 

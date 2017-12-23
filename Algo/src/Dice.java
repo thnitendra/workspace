@@ -1,5 +1,3 @@
-package nit.algo;
-
 import java.math.BigInteger;
 
 /**

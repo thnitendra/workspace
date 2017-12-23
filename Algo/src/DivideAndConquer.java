@@ -1,5 +1,3 @@
-package nit.algo;
-
 public class DivideAndConquer {
 
 	interface Callbacks {

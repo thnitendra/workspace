@@ -1,5 +1,3 @@
-package nit.algo;
-
 public class QuickSort<T extends Comparable<T>> {
 	private T[] arr;
 
