@@ -1,0 +1,18 @@
+# https://www.cloudera.com/documentation/enterprise/5-10-x/topics/quickstart_docker_container.html
+# https://www.cloudera.com/documentation/enterprise/5-10-x/topics/cm_qs_quick_start.html#cmig_topic_6_5
+# https://www.cloudera.com/developers/get-started-with-hadoop-tutorial.html
+
+docker pull cloudera/quickstart:latest
+docker images # note the hash of the image and substitute it below
+docker run --privileged=true \
+--hostname=quickstart.cloudera \
+-t -i ${HASH} \
+/usr/bin/docker-quickstart
+
+# Connecting to the Docker Shell
+If you do not pass the -d flag to docker run, your terminal automatically attaches to the container.
+A container dies when you exit the shell, but you can disconnect and leave the container running by typing Ctrl+p followed by Ctrl+q.
+If you disconnect from the shell or passed the -d flag on startup, you can connect to the shell later using the following command:
+docker attach [CONTAINER HASH]
+
+
