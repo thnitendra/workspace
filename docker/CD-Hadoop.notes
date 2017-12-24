@@ -9,10 +9,5 @@ docker run --privileged=true \
 -t -i ${HASH} \
 /usr/bin/docker-quickstart
 
-# Connecting to the Docker Shell
-If you do not pass the -d flag to docker run, your terminal automatically attaches to the container.
-A container dies when you exit the shell, but you can disconnect and leave the container running by typing Ctrl+p followed by Ctrl+q.
-If you disconnect from the shell or passed the -d flag on startup, you can connect to the shell later using the following command:
-docker attach [CONTAINER HASH]
 
 

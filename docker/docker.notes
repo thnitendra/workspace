@@ -1,14 +1,21 @@
 docker images
-docker run hello-world
-docker run -it ubuntu bash
 docker ps
 docker ps -a
 docker rm ddcd3e1af0ec
-docker run ubuntu pwd
 docker run -it ubuntu ls /usr/local/java
 docker build -f Dockerfile -t demo/oracle-java:8 .
 docker run -it demo/oracle-java:8
 docker pull picoded/ubuntu-openjdk-8-jdk
+
+#file sharing
+docker run -i -t -d -v /tmp:/tmp openjdk bash
+
+# Connecting to the Docker Shell
+If you do not pass the -d flag to docker run, your terminal automatically attaches to the container.
+A container dies when you exit the shell, but you can disconnect and leave the container running by typing Ctrl+p followed by Ctrl+q.
+If you disconnect from the shell or passed the -d flag on startup, you can connect to the shell later using the following command:
+docker attach [CONTAINER HASH]
+
 
 docker volume ls
 --screen ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty
