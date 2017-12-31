@@ -1,0 +1,75 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/data/mongo
+        http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task-4.2.xsd">
+
+    <context:component-scan base-package="app"/>
+
+
+    <context:property-placeholder location="classpath:default.properties,
+    										classpath:env/env.properties" ignore-unresolvable="true"/>
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${mail.host}"/>
+        <property name="port" value="${mail.port}"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.transport.protocol">smtp</prop>
+            </props>
+        </property>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+    <mongo:mongo-client id="mongo2" replica-set="${mongo.replicaSet}" credentials="${mongo.credential}">
+        <mongo:client-options write-concern="NORMAL" connections-per-host="8"
+                              threads-allowed-to-block-for-connection-multiplier="4"
+                              connect-timeout="1000"
+                              max-wait-time="1500"
+                              socket-keep-alive="true"
+                              socket-timeout="1500"
+        />
+    </mongo:mongo-client>
+    <mongo:db-factory dbname="admin" mongo-ref="mongo2"/>
+
+    <bean id="mappingContext"
+          class="org.springframework.data.mongodb.core.mapping.MongoMappingContext"/>
+
+    <!-- This is to remove the class field in mongodb-->
+    <bean id="defaultMongoTypeMapper"
+          class="org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper">
+        <constructor-arg name="typeKey">
+            <null/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="mappingMongoConverter"
+          class="org.springframework.data.mongodb.core.convert.MappingMongoConverter">
+        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
+        <constructor-arg name="mappingContext" ref="mappingContext"/>
+        <property name="typeMapper" ref="defaultMongoTypeMapper"/>
+    </bean>
+
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
+        <constructor-arg name="mongoConverter" ref="mappingMongoConverter"/>
+    </bean>
+
+    <mongo:repositories base-package="app.repo"/>
+
+    <bean id="appBatch" class="app.batch.AppBatch" />
+
+    <task:scheduled-tasks>
+        <task:scheduled ref="appBatch" method="execBatch"
+                        fixed-delay="120000" initial-delay="5000" />
+    </task:scheduled-tasks>
+
+</beans>

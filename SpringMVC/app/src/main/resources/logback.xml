@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property file="spring.properties" />
+
+	<contextListener class="app.common.LoggerStartupListener"/>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+
+			<Pattern>
+				%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+			</Pattern>
+
+		</layout>
+	</appender>
+
+	<appender name="APP_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>DENY</onMatch>
+			<onMismatch>ACCEPT</onMismatch>
+		</filter>
+		<file>logs/app_info.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>logs/app_info.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+			<maxHistory>7</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %X{API_REQUEST_ID} %-5level %logger{36} %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="APP_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<file>logs/app_error.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>logs/app_error.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>5MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<maxHistory>7</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %X{API_REQUEST_ID} %-5level %logger{36} %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="ERROR_EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>ERROR</level>
+		</filter>
+
+		<smtpHost>${alertMail.host}</smtpHost>
+		<smtpPort>${alertMail.port}</smtpPort>
+		<to>${alertMail.error.to}</to>
+		<from>${alertMail.from}</from>
+		<subject>[APP] %level : %logger - %msg</subject>
+		<layout class="ch.qos.logback.classic.html.HTMLLayout">
+			<pattern>%date%-5level%logger{36}%class{36}%method%message</pattern>
+		</layout>
+
+		<cyclicBufferTracker class="ch.qos.logback.core.spi.CyclicBufferTracker">
+			<!-- send just one log entry per email -->
+			<bufferSize>1</bufferSize>
+		</cyclicBufferTracker>
+	</appender>
+
+	<root level="info">
+		<appender-ref ref="STDOUT"/>
+	</root>
+
+	<logger name="org.springframework" level="debug" additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
+	
+	<logger name="com.mkyong.helloworld" level="debug" additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
+	
+	<logger name="APP_LOGGER" level="INFO">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="APP_INFO" />
+		<appender-ref ref="APP_ERROR" />
+	</logger>
+
+</configuration>

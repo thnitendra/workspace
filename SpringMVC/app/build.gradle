@@ -1,0 +1,183 @@
+group 'nit.spring.mvc'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'groovy'
+apply plugin: 'idea'
+//apply plugin: 'eclipse-wtp'
+//apply plugin: 'jetty'
+
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+        resources {
+            srcDirs = ['src/test/resources']
+        }
+    }
+}
+
+dependencies {
+    //testCompile group: 'junit', name: 'junit', version: '4.11'
+    //compile 'ch.qos.logback:logback-classic:1.1.3'
+    //compile 'org.springframework:spring-webmvc:4.2.4.RELEASE'
+    //compile 'javax.servlet:jstl:1.2'
+    //groovy(
+    compile(
+            // spring mvc
+            "org.springframework:spring-aop:4.2.4.RELEASE",
+            'org.springframework:spring-webmvc:4.2.4.RELEASE',
+
+            // spring Security
+            'org.springframework.security:spring-security-core:4.0.3.RELEASE',
+            'org.springframework.security:spring-security-web:4.0.3.RELEASE',
+            'org.springframework.security:spring-security-config:4.0.3.RELEASE',
+            'org.springframework.security:spring-security-crypto:4.0.3.RELEASE',
+            'org.springframework.session:spring-session-data-mongo:1.2.0.RC1',
+
+            // spring data
+            'org.mongodb:mongo-java-driver:3.2.2',
+            'org.springframework.data:spring-data-mongodb:1.8.2.RELEASE',
+
+            // spring context
+            'org.springframework:spring-context:4.2.4.RELEASE',
+            'org.springframework:spring-context-support:4.2.4.RELEASE',
+
+            // spring beans
+            'org.springframework:spring-beans:4.2.4.RELEASE',
+
+            // javax
+            'javax.mail:mail:1.4.7',
+
+            // joda time - a third party lib which is better than Java built-in Datetime lib
+            'joda-time:joda-time:2.9.2',
+
+            // google guava - currently only use the Cache interface provided by Guava
+            'com.google.guava:guava:19.0',
+
+            // hibernate validator
+            'org.hibernate:hibernate-validator:5.2.2.Final',
+
+            // logback
+            'ch.qos.logback:logback-core:1.1.1',
+            "ch.qos.logback:logback-classic:1.1.3",
+
+            // logstash-logback
+            // To output the log in JSON format so that it can be interpreted by Splunk better
+            // https://github.com/logstash/logstash-logback-encoder#loggingevent-fields
+            'net.logstash.logback:logstash-logback-encoder:4.5.1',
+
+            // servlet api
+            "javax.servlet:javax.servlet-api:3.1.0",
+
+            // view tag library
+            "javax.servlet:jstl:1.2",
+
+            // groovy
+            "org.codehaus.groovy:groovy:2.4.5",
+
+            // test
+            'org.springframework:spring-test:4.2.4.RELEASE',
+            'junit:junit:4.12',
+
+            // json
+            'com.fasterxml.jackson.core:jackson-databind:2.5.4',
+            'com.fasterxml.jackson.core:jackson-core:2.5.5',
+            'com.fasterxml.jackson.core:jackson-annotations:2.5.5',
+
+            // gson
+            'com.google.code.gson:gson:2.2.4',
+
+            // apache
+            'org.apache.httpcomponents:httpclient:4.5.1',
+            'org.apache.commons:commons-lang3:3.3.2',
+            'org.apache.commons:commons-collections4:4.0',
+
+            //JSON
+            group: 'org.json', name: 'json', version:'20140107',
+
+    )
+
+    // spock
+    testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
+    testCompile "org.spockframework:spock-spring:1.0-groovy-2.4"
+    testCompile 'cglib:cglib-nodep:3.2.1'
+
+    // lombok - to mitigate the verbose part of Java
+    // https://projectlombok.org/
+    providedCompile "org.projectlombok:lombok:1.16.6"
+    //compile "org.projectlombok:lombok:1.16.6"
+
+    // hasmcrest and jsonpath
+    testCompile 'org.hamcrest:hamcrest-all:1.3'
+    testCompile 'com.jayway.jsonpath:json-path:2.2.0'
+
+    // embed Mongo for testing
+    testCompile 'cz.jirutka.spring:embedmongo-spring:1.3.1'
+
+    // fake mail server for testing
+    testCompile 'com.icegreen:greenmail:1.4.1'
+
+//    // Embeded Jetty for testing
+//    jettyRun{
+//        contextPath = "spring4"
+//        httpPort = 8080
+//    }
+//
+//    jettyRunWar{
+//        contextPath = "spring4"
+//        httpPort = 8080
+//    }
+
+}
+
+task deleteFile(type: Delete) {
+    File f = new File('src/main/resources/env/env.properties')
+    if (f.exists())
+        delete 'src/main/resources/env/env.properties'
+}
+
+task setActiveEnv(type: Copy) {
+    dependsOn deleteFile
+    String filename = activeEnv + '.properties'
+    switch (activeEnv) {
+        case 'prod':
+        case 'stg':
+        case 'local':
+            from 'src/main/resources/' + filename
+            into 'src/main/resources/env'
+            rename filename, 'env.properties'
+            break
+        default:
+            print 'Invalid Env! ' + activeEnv
+            break
+    }
+}
+
+//test {
+//    systemProperties 'logback.configurationFile' : new File(projectDir,'src/test/resources/logback-for-test.xml').absolutePath
+//}
+
+processResources.dependsOn setActiveEnv
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.4'
+}
