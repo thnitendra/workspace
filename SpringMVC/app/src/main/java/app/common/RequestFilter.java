@@ -10,7 +10,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-@Slf4j(topic = "APP_INFO_LOG")
+@Slf4j(topic = "APP_ACCESS_LOG")
 public class RequestFilter implements Filter{
 
     @Override

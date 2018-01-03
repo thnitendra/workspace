@@ -87,4 +87,8 @@
 		<appender-ref ref="APP_ERROR" />
 	</logger>
 
+	<logger name="APP_ACCESS_LOG" level="INFO">
+		<appender-ref ref="STDOUT" />
+	</logger>
+
 </configuration>

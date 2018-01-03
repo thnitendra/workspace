@@ -38,7 +38,7 @@
                               socket-timeout="1500"
         />
     </mongo:mongo-client>
-    <mongo:db-factory dbname="admin" mongo-ref="mongo2"/>
+    <mongo:db-factory dbname="${mongo.database}" mongo-ref="mongo2"/>
 
     <bean id="mappingContext"
           class="org.springframework.data.mongodb.core.mapping.MongoMappingContext"/>

@@ -23,7 +23,7 @@ public class AppController {
     @Autowired
     OrgService consumerApiReqService;
 
-    @RequestMapping(value = "/orgs", method = RequestMethod.GET)
+//    @RequestMapping(value = "/orgs", method = RequestMethod.GET)
     //@ResponseBody
 //    public String viewOrganizations(
 //            @RequestParam(required=false) String type,
@@ -34,7 +34,7 @@ public class AppController {
 //        return "viewOrganizationList";
 //    }
 
-    @RequestMapping(value = "/users", method = RequestMethod.GET)
+//    @RequestMapping(value = "/users", method = RequestMethod.GET)
     //@ResponseBody
 //    public String viewOrganizations(
 //            @PathVariable(value = "type") String type,
