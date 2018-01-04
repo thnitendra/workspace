@@ -35,6 +35,11 @@
 
     <security:authentication-manager>
         <security:authentication-provider ref="authenticationService"/>
+        <!--<security:authentication-provider>-->
+            <!--<security:user-service>-->
+                <!--<security:user name="nite" password="nite" authorities="ROLE_USER" />-->
+            <!--</security:user-service>-->
+        <!--</security:authentication-provider>-->
     </security:authentication-manager>
 
 </beans>

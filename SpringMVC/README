@@ -1,0 +1,7 @@
+#https://github.com/mkyong/spring4-mvc-gradle-xml-hello-world
+#http://www.baeldung.com/spring-security-login
+#http://www.baeldung.com/spring-security-authentication-provider
+cd app
+./gradlew jettyRun -PactiveEnv=local
+
+

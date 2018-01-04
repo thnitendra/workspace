@@ -17,7 +17,7 @@
     <mvc:annotation-driven/>
 
     <mvc:interceptors>
-        <bean class="AccessLogInterceptor"/>
+        <bean class="app.common.AccessLogInterceptor"/>
     </mvc:interceptors>
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

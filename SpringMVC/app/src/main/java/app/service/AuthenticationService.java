@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,15 +22,15 @@ public class AuthenticationService implements AuthenticationProvider {
         String name = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-        // TODO: Authenticate
-
         List<GrantedAuthority> grantedAuths = new ArrayList<>();
-
-        // Although in the xml configuration file, the roles don't have prefix,
-        // spring-security will add "ROLE_" to them as the prefix by default.
-        // So we need to add "ROLE_" to user role here so that they can match.
-        // For reference, please check hasAnyRole(String... roles) in spring-security
-        grantedAuths.add(new SimpleGrantedAuthority("ROLE_USER"));
+        System.out.println("UserPassword: " + name + " " + password);
+        if("nite".equals(name) && "nite".equals(password)) {
+            // Although in the xml configuration file, the roles don't have prefix,
+            // spring-security will add "ROLE_" to them as the prefix by default.
+            // So we need to add "ROLE_" to user role here so that they can match.
+            // For reference, please check hasAnyRole(String... roles) in spring-security
+            grantedAuths.add(new SimpleGrantedAuthority("ROLE_USER"));
+        }
 
         return new UsernamePasswordAuthenticationToken(new CustomUserBean(name), password, grantedAuths);
 
@@ -37,8 +38,13 @@ public class AuthenticationService implements AuthenticationProvider {
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return authentication.equals(UsernamePasswordAuthenticationToken.class);
+        //return authentication.equals(UsernamePasswordAuthenticationToken.class);
+        return true;
     }
 
+    public String getLoggedUser() throws Exception {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        return (!name.equals("nite")) ? name : null;
+    }
 }
 

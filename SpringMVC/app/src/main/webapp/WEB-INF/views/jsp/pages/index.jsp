@@ -5,8 +5,8 @@
 <head>
 <title>Gradle + Spring MVC</title>
 
-<spring:url value="/resources/core/css/hello.css" var="coreCss" />
-<spring:url value="/resources/core/css/bootstrap.min.css" var="bootstrapCss" />
+<spring:url value="/resources/css/hello.css" var="coreCss" />
+<spring:url value="/resources/css/bootstrap.min.css" var="bootstrapCss" />
 <link href="${bootstrapCss}" rel="stylesheet" />
 <link href="${coreCss}" rel="stylesheet" />
 </head>
@@ -66,12 +66,12 @@
 
 	<hr>
 	<footer>
-		<p>&copy; Mkyong.com 2015</p>
+		<p>&copy; nite.com</p>
 	</footer>
 </div>
 
-<spring:url value="/resources/core/css/hello.js" var="coreJs" />
-<spring:url value="/resources/core/css/bootstrap.min.js" var="bootstrapJs" />
+<spring:url value="/resources/js/hello.js" var="coreJs" />
+<spring:url value="/resources/js/bootstrap.min.js" var="bootstrapJs" />
 
 <script src="${coreJs}"></script>
 <script src="${bootstrapJs}"></script>

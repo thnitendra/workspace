@@ -7,12 +7,16 @@ import app.service.OrgService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Slf4j(topic = "APP_LOGGER")
 @Controller
@@ -54,6 +58,16 @@ public class AppController {
         model.put("msg", "APP-Msg");
 
         return "index";
+    }
+
+    @RequestMapping(value = "/login", method = GET)
+    public String loginForm(@RequestParam(value = "error", required = false) String error, Model model) {
+        log.debug("login page");
+        if (error != null && Integer.parseInt(error) == 1) {
+            model.addAttribute("error", "Login Fail");
+        }
+        return "login";
+        //return "redirect:/perform_login";
     }
 
     @RequestMapping(value = "/hello/{name:.+}", method = RequestMethod.GET)
