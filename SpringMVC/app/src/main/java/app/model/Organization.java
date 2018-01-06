@@ -1,7 +1,10 @@
 package app.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
@@ -10,6 +13,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "organization")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Organization {
     @Id
     private String id;
@@ -24,6 +29,7 @@ public class Organization {
     private String createdBy;
 
     @PersistenceConstructor
+    @JsonCreator
     public Organization(
             @JsonProperty("id") String id,
             @JsonProperty("name") String name,

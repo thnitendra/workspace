@@ -20,4 +20,7 @@ public class OrgService {
         //log.debug("Retrieving app.model.Organization list for {}", kv(USER_KEYWORD, AppUserHelper.getUserName()));
         return (List<Organization>) organizationRepo.findAll();
     }
+    public void save(Organization org) {
+        organizationRepo.save(org);
+    }
 }

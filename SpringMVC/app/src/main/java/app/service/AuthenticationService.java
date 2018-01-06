@@ -30,10 +30,10 @@ public class AuthenticationService implements AuthenticationProvider {
             // So we need to add "ROLE_" to user role here so that they can match.
             // For reference, please check hasAnyRole(String... roles) in spring-security
             grantedAuths.add(new SimpleGrantedAuthority("ROLE_USER"));
+            return new UsernamePasswordAuthenticationToken(new CustomUserBean(name), password, grantedAuths);
+        } else {
+            return null;
         }
-
-        return new UsernamePasswordAuthenticationToken(new CustomUserBean(name), password, grantedAuths);
-
     }
 
     @Override

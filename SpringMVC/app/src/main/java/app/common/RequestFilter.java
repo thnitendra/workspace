@@ -40,7 +40,7 @@ public class RequestFilter implements Filter{
         // Do nothing
     }
 
-    private static CustomUserBean getUser() {
+    public static CustomUserBean getUser() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         log.debug(securityContext.toString());
         Authentication authentication = securityContext.getAuthentication();
