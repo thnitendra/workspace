@@ -1,0 +1,28 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <import resource="classpath:spring-core-config.xml"/>
+    <import resource="classpath:spring-web-config.xml"/>
+    <mvc:annotation-driven/>
+
+    <bean id="user" class="app.model.CustomUserBean">
+        <constructor-arg index="0" value="nite"/>
+    </bean>
+
+    <bean id="org" class="app.model.Organization">
+        <constructor-arg index="0" value="dummyOrgId"/>
+        <constructor-arg index="1" value="OrgName"/>
+        <constructor-arg index="2" value="GeneralType"/>
+        <constructor-arg index="3" value="Nite"/>
+    </bean>
+
+    <bean id="createOrgReq" class="app.dto.CreateOrgRequest">
+        <property name = "name" value = "OrgName"/>
+        <property name = "type" value = "GeneralTest"/>
+    </bean>
+</beans>
