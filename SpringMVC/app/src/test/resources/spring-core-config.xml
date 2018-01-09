@@ -28,7 +28,7 @@
             <property name="defaultEncoding" value="UTF-8"/>
         </bean>
 
-        <mongo:db-factory dbname="admin" mongo-ref="mongo"/>
+        <mongo:db-factory dbname="${mongo.database}" mongo-ref="mongo"/>
 
         <bean id="mappingContext"
               class="org.springframework.data.mongodb.core.mapping.MongoMappingContext"/>

@@ -5,3 +5,8 @@ cd app
 ./gradlew jettyRun -PactiveEnv=local
 
 
+#to start Jetty in debug mode
+1. export GRADLE_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,address=9999,server=y,suspend=y"
+2. Intellij -> Run -> Edit Configuration -> + -> Remote
+3. ./gradlew jettyRun -PactiveEnv=local
+4. Start remote debug on Intellij

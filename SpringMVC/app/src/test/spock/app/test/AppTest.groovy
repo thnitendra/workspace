@@ -30,12 +30,12 @@ class AppTest extends Specification {
         when:
         list.add(1)
         then:
-        2 == list.get(0)
+        1 == list.get(0)
     }
 
     def "should calculate power of number 2"() {
         expect:
-        Math.pow(2) == 4
+        Math.pow(2, 2) == 4
     }
 
     def "creating example stubs"() {
@@ -122,7 +122,7 @@ class AppTest extends Specification {
         where:
         a | b | c
         1 | 3 | 3
-        7 | 4 | 4
+        7 | 4 | 7
         0 | 0 | 0
     }
 

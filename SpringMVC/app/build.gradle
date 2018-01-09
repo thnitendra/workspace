@@ -29,7 +29,7 @@ sourceSets {
     }
     test {
         java {
-            srcDirs = ['src/test/java']
+            srcDirs = ['src/test/spock']
         }
         resources {
             srcDirs = ['src/test/resources']
@@ -151,12 +151,13 @@ dependencies {
 
 }
 
+def activeEnv='local'
+
 task deleteFile(type: Delete) {
     File f = new File('src/main/resources/env/env.properties')
     if (f.exists())
         delete 'src/main/resources/env/env.properties'
 }
-
 task setActiveEnv(type: Copy) {
     dependsOn deleteFile
     String filename = activeEnv + '.properties'
@@ -174,9 +175,9 @@ task setActiveEnv(type: Copy) {
     }
 }
 
-//test {
-//    systemProperties 'logback.configurationFile' : new File(projectDir,'src/test/resources/logback-for-test.xml').absolutePath
-//}
+test {
+    systemProperties 'logback.configurationFile' : new File(projectDir,'src/test/resources/logback-for-test.xml').absolutePath
+}
 
 processResources.dependsOn setActiveEnv
 
