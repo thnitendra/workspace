@@ -1,0 +1,9 @@
+Start with java main class
+pl.finsys.example.BookstoreApplication
+
+Can also ne run with this command:
+mvn spring-boot:run
+
+and access these endpoints
+http://localhost:8080/v2/api-docs
+http://localhost:8080/swagger-ui.html
