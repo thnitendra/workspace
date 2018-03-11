@@ -15,10 +15,10 @@
     <mvc:resources mapping="/resources/**" location="/resources/"/>
     <mvc:annotation-driven/>
 
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-        <property name="prefix" value="/WEB-INF/views/jsp/pages"/>
-        <property name="suffix" value=".jsp"/>
-    </bean>
+    <!--<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+        <!--<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>-->
+        <!--<property name="prefix" value="/WEB-INF/views/jsp/pages"/>-->
+        <!--<property name="suffix" value=".jsp"/>-->
+    <!--</bean>-->
 
 </beans>

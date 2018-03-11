@@ -7,6 +7,9 @@ import app.model.Organization
 import app.repo.OrganizationRepository
 import app.service.OrgService
 import com.fasterxml.jackson.databind.ObjectMapper
+import groovy.json.JsonSlurper
+import org.apache.http.HttpStatus
+import org.junit.Assert
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -16,9 +19,19 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.MvcResult
+import org.springframework.test.web.servlet.RequestBuilder
+import org.springframework.test.web.servlet.ResultActions
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.servlet.view.InternalResourceViewResolver
 import spock.lang.Specification
+
+import static org.hamcrest.Matchers.hasKey
+import static org.hamcrest.Matchers.hasSize
+import static org.hamcrest.Matchers.is
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import static org.springframework.http.MediaType.APPLICATION_JSON
@@ -26,8 +39,17 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8
 
 import javax.servlet.http.HttpServletRequest
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view
+
 /**
- * Created by nitendra.thakur on 2018/01/08.
+ * https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-testing.html
+ * http://henningpetersen.com/post/18/testing-spring-mvc-controllers-with-spock
+ *
  */
 @ContextConfiguration("classpath:/test-context.xml")
 class AppControllerTest extends Specification {
@@ -53,21 +75,12 @@ class AppControllerTest extends Specification {
     CreateOrgRequest createOrgReq
 
 
-    OrgService orgService
-
-    ObjectMapper mapper = new ObjectMapper()
-    def sessionAttributes
-
     HttpServletRequest webRequest
 
     def setup() {
         initSec()
 
-        orgService = Stub(OrgService)
-        controller.orgService = orgService
-        mockMvc = init(controller)
-
-        sessionAttributes = [("SESSION_ATTR") : org.name];
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).build()
 
         //selectedOrgRequest = new SelectedOrgRequest(org.orgName)
     }
@@ -78,18 +91,6 @@ class AppControllerTest extends Specification {
         }
     }
 
-    // FIXME. Is it required even after wirign thru xmls. May be due to resource folder conflict in both main and test sources
-    public def init(def controller) {
-        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-        viewResolver.setPrefix("/WEB-INF/views/jsp/pages/");
-        viewResolver.setSuffix(".jsp");
-
-        def mockMvc = MockMvcBuilders.standaloneSetup(controller)
-                .setViewResolvers(viewResolver)
-                .build();
-        return mockMvc
-    }
-
     public def initSec() {
         List<GrantedAuthority> grantedAuths = new ArrayList<>();
         grantedAuths.add(new SimpleGrantedAuthority("ROLE_USER")); // Hardcoded role in app.service.AuthenticationService.java
@@ -98,35 +99,78 @@ class AppControllerTest extends Specification {
         SecurityContextHolder.getContext().setAuthentication(auth);
     }
 
-    private def getResponse(def url) {
-        return mockMvc.perform(get(url).contentType(APPLICATION_JSON)).andReturn().response
-    }
-
-    private def getResponse(def url, def request) {
-        def json = mapper.writeValueAsString(request)
-        return mockMvc.perform(get(url).contentType(APPLICATION_JSON).content(json))
-    }
-
-    private def postResponse(def url, def request, def sessionAttributes) {
-        def json = mapper.writeValueAsString(request)
-        mockMvc.perform(post(url).contentType(APPLICATION_JSON).content(json).sessionAttrs(sessionAttributes))
-    }
-
-    def "retrieveAllOrganizations: /getOrgs"() {
+    def "getOrgs Service Test: /getOrgs (Using in-memory mongo)"() {
         given:
-            orgService.getOrgs() >> {
-                List orgs = new LinkedList();
-                orgs << org
-                return orgs
-            }
+            List orgs = new LinkedList();
+            orgs << org
+            controller.orgService.save(org)
 
         when:
-            def response = getResponse("/getOrgs")
+            List respOrgs = controller.orgService.getOrgs()
 
         then:
-            response.andExpect(status == 200)
-                //.andExpect(view().name("viewOrganizationList"))
-                //.andExpect(model().attribute("content", "viewOrganizationList"))
-                //.andExpect(model().attribute("featureId", "organizations-management"))
+            Assert.assertEquals(orgs.size(), respOrgs.size());
+            Assert.assertEquals(orgs.get(0).name, respOrgs.get(0).name);
     }
+
+    def "getOrgs (REST API) Controller Test: /getOrgs"() {
+        given:
+            //def sessionAttributes = [("SESSION_ATTR") : org.name];
+            def sessionAttributes = null;
+
+        when:
+            ResultActions saveResp = getResponse("post", "/org/save", createOrgReq, null)
+        then:
+            saveResp.andExpect(status().isOk())
+
+        when:
+            ResultActions response = getResponse("get", "/getOrgs", null, sessionAttributes)
+            response.andDo(MockMvcResultHandlers.print())
+            // Can be printed like this also. But if printed lke this then .anExpect(content()....) fails
+            //MvcResult respResult = response.andReturn()
+            //String content = respResult.getResponse().getContentAsString();
+            //println content
+        then:
+            //ResultActions result = response.andExpect(status().isOk())
+            response.andExpect(status().isOk())
+                    .andExpect(content().contentType(APPLICATION_JSON_UTF8))
+                    .andExpect(jsonPath('$', hasSize(1))) // size of array
+                    .andExpect(jsonPath('$.*', hasSize(1))) // count of members of object
+                    .andExpect(jsonPath('$.[0]', hasKey("name")))
+                    .andExpect(jsonPath('$.[0].name', is("OrgName")))
+    }
+
+    def "orgs (MVC) Controller Test: /orgs"() {
+        given:
+            List orgs = new LinkedList();
+            orgs << org
+            controller.orgService.save(org)
+
+        when:
+            def response = mockMvc.perform(get("/orgs").contentType(APPLICATION_JSON))//getResponse("/orgs")
+
+        then:
+            response.andExpect(status().isOk())
+                    .andExpect(view().name("viewOrganizationList"))
+                    .andExpect(model().attribute("content", "viewOrganizationList"))
+                    .andExpect(model().attribute("state", "clean"))
+    }
+
+    private ResultActions getResponse(String method, def url, def request, def sessionAttributes) {
+        MockHttpServletRequestBuilder reqBld = (method == "post") ? post(url) : get(url)
+
+        reqBld = reqBld.contentType(APPLICATION_JSON)
+
+        if(request != null) {
+            reqBld.content( new ObjectMapper().writeValueAsString(request) )
+        }
+
+        if(sessionAttributes != null) {
+            reqBld.sessionAttrs(sessionAttributes);
+        }
+
+        return mockMvc.perform(reqBld);
+
+    }
+
 }
