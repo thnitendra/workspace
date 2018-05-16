@@ -1,0 +1,9 @@
+# https://www.codementor.io/olatundegaruba/nodejs-restful-apis-in-10-minutes-q0sgsfhbd
+
+npm init
+
+npm install --save-dev nodemon
+
+npm install express --save
+
+npm run start
